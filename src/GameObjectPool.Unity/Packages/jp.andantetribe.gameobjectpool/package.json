@@ -1,0 +1,16 @@
+{
+  "name": "jp.andantetribe.gameobjectpool",
+  "displayName": "GameObjectPool",
+  "author": {
+    "name": "AndanteTribe",
+    "url": "https://github.com/AndanteTribe"
+  },
+  "version": "0.1.2",
+  "unity": "2021.3",
+  "description": "Async-friendly GameObject pool for Unity.",
+  "license": "MIT",
+  "dependencies": {
+    "com.cysharp.unitask": "2.5.10",
+    "jp.andantetribe.objectreference": "0.1.2"
+  }
+}
