@@ -2,6 +2,7 @@
 [![unity-meta-check](https://github.com/AndanteTribe/GameObjectPool/actions/workflows/unity-meta-check.yml/badge.svg)](https://github.com/AndanteTribe/GameObjectPool/actions/workflows/unity-meta-check.yml)
 [![Releases](https://img.shields.io/github/release/AndanteTribe/GameObjectPool.svg)](https://github.com/AndanteTribe/GameObjectPool/releases)
 [![GitHub license](https://img.shields.io/github/license/AndanteTribe/GameObjectPool.svg)](./LICENSE)
+[![openupm](https://img.shields.io/npm/v/jp.andantetribe.gameobjectpool?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/jp.andantetribe.gameobjectpool/)
 
 [English](README.md) | 日本語
 
