@@ -29,6 +29,7 @@ https://github.com/AndanteTribe/GameObjectPool.git?path=src/GameObjectPool.Unity
 using System;
 using AndanteTribe.Unity.Extensions;
 using Cysharp.Threading.Tasks;
+using ObjectReference;
 using UnityEngine;
 
 public class PoolExample : MonoBehaviour
