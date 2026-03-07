@@ -1,0 +1,17 @@
+{
+    "name": "GameObjectPool",
+    "rootNamespace": "AndanteTribe.Unity.Extensions",
+    "references": [
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:5357f2d493d45f849802c905da70206b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
