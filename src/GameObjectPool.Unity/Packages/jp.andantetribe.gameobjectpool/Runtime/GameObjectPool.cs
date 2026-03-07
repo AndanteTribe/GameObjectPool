@@ -63,10 +63,12 @@ namespace AndanteTribe.Unity.Extensions
         /// </summary>
         private readonly List<T> _pool;
 
-
+        /// <summary>
+        /// The number of instances currently in the pool.
+        /// </summary>
         public int Count => _pool.Count;
 
-        public GameObjectPool(Transform root, IObjectReference<T> reference, int capacity)
+        public GameObjectPool(Transform root, IObjectReference<T> reference, int capacity = 10)
         {
             _root = root;
             _reference = reference;
