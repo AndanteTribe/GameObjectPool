@@ -5,12 +5,12 @@
     "name": "AndanteTribe",
     "url": "https://github.com/AndanteTribe"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "unity": "6000.0",
   "description": "Async-friendly GameObject pool for Unity.",
   "license": "MIT",
   "dependencies": {
     "com.cysharp.unitask": "2.5.10",
-    "jp.andantetribe.objectreference": "0.1.2"
+    "jp.andantetribe.objectreference": "1.0.0"
   }
 }
