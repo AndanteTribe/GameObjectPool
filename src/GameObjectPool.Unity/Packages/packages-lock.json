@@ -57,7 +57,7 @@
       "source": "embedded",
       "dependencies": {
         "com.cysharp.unitask": "2.5.10",
-        "jp.andantetribe.objectreference": "0.1.2"
+        "jp.andantetribe.objectreference": "1.0.0"
       }
     },
     "jp.andantetribe.objectreference": {
@@ -67,7 +67,7 @@
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0"
       },
-      "hash": "e4ba63395f0dd4240df5618aa824581d8ff5227f"
+      "hash": "1618dcb792b97d78c4a0a0accebffead1f414f85"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
