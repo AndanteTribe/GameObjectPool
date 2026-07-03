@@ -1,0 +1,23 @@
+{
+    "name": "GameObjectPool.Tests",
+    "rootNamespace": "AndanteTribe.Unity.Extensions.Tests",
+    "references": [
+        "GUID:848fd111f599ca342a468714a721b96b",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:5357f2d493d45f849802c905da70206b",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
