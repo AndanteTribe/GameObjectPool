@@ -10,7 +10,6 @@
   "description": "Async-friendly GameObject pool for Unity.",
   "license": "MIT",
   "dependencies": {
-    "com.cysharp.unitask": "2.5.10",
-    "jp.andantetribe.objectreference": "1.0.0"
+    "jp.andantetribe.objectreference": "1.0.2"
   }
 }
