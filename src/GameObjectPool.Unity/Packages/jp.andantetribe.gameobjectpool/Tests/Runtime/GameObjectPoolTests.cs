@@ -127,7 +127,6 @@ namespace AndanteTribe.Unity.Extensions.Tests
             PooledComponent rentedInstance;
 
             var pending = _pool!.RentScopeAsync();
-            Assert.That(pending.IsCompletedSuccessfully, Is.True);
             using (var scope = await pending)
             {
                 rentedInstance = scope.Instance;
@@ -137,6 +136,26 @@ namespace AndanteTribe.Unity.Extensions.Tests
 
             Assert.That(rentedInstance.gameObject.activeSelf, Is.False);
             Assert.That(rentedInstance.transform.parent, Is.EqualTo(_root));
+            Assert.That(_pool.Count, Is.EqualTo(1));
+        });
+
+        [UnityTest]
+        public IEnumerator RentScopeAsync_WithPreallocatedInstance_CompletesSynchronously() => Run(async () =>
+        {
+            await _pool!.PreallocateAsync(1);
+            var expected = _root!.GetChild(0).GetComponent<PooledComponent>();
+
+            var pending = _pool.RentScopeAsync();
+            Assert.That(pending.IsCompletedSuccessfully, Is.True);
+            using (var scope = await pending)
+            {
+                Assert.That(scope.Instance, Is.SameAs(expected));
+                Assert.That(scope.Instance.gameObject.activeSelf, Is.True);
+                Assert.That(_pool.Count, Is.Zero);
+                Assert.That(_reference!.LoadCount, Is.EqualTo(1));
+            }
+
+            Assert.That(expected.gameObject.activeSelf, Is.False);
             Assert.That(_pool.Count, Is.EqualTo(1));
         });
 
