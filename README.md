@@ -13,7 +13,6 @@ It allows you to efficiently reuse `MonoBehaviour` instances, reducing the overh
 
 ## Requirements
 - Unity 6000.0 or later
-- [UniTask](https://github.com/Cysharp/UniTask) 2.5.10 or later
 - [ObjectReference](https://github.com/AndanteTribe/ObjectReference) 0.1.2 or later
 
 ## Installation
@@ -28,7 +27,6 @@ https://github.com/AndanteTribe/GameObjectPool.git?path=src/GameObjectPool.Unity
 ```csharp
 using System;
 using AndanteTribe.Unity.Extensions;
-using Cysharp.Threading.Tasks;
 using ObjectReference;
 using UnityEngine;
 
@@ -39,7 +37,7 @@ public class PoolExample : MonoBehaviour
 
     private GameObjectPool<MyComponent> _pool;
 
-    private async UniTaskVoid Start()
+    private async void Start()
     {
         _pool = new GameObjectPool<MyComponent>(transform, prefab, capacity: 4);
 
@@ -51,7 +49,7 @@ public class PoolExample : MonoBehaviour
         {
             var instance = scope.Instance;
             instance.transform.position = Vector3.zero;
-            await UniTask.Delay(TimeSpan.FromSeconds(1), cancellationToken: destroyCancellationToken);
+            await Awaitable.WaitForSecondsAsync(1, destroyCancellationToken);
         } // Automatically returned to the pool when the scope exits
     }
 
