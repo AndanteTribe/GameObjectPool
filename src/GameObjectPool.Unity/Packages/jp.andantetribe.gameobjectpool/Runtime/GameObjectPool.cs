@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using ObjectReference;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -18,7 +18,6 @@ namespace AndanteTribe.Unity.Extensions
     /// <![CDATA[
     /// using System;
     /// using AndanteTribe.Unity.Extensions;
-    /// using Cysharp.Threading.Tasks;
     /// using UnityEngine;
     ///
     /// public class PoolExample : MonoBehaviour
@@ -26,7 +25,7 @@ namespace AndanteTribe.Unity.Extensions
     ///     [SerializeReference]
     ///     IObjectReference<MyComponent> prefab;
     ///
-    ///     private async UniTaskVoid Start()
+    ///     private async void Start()
     ///     {
     ///         var pool = new GameObjectPool<MyComponent>(transform, prefab, capacity: 4);
     ///
@@ -38,7 +37,7 @@ namespace AndanteTribe.Unity.Extensions
     ///         {
     ///             var instance = scope.Instance;
     ///             instance.transform.position = Vector3.zero;
-    ///             await UniTask.Delay(TimeSpan.FromSeconds(1));
+    ///             await Awaitable.WaitForSecondsAsync(1);
     ///         } // Automatically returned when scope exits
     ///     }
     /// }
@@ -80,10 +79,16 @@ namespace AndanteTribe.Unity.Extensions
         /// </summary>
         /// <param name="count"></param>
         /// <param name="cancellationToken"></param>
-        public async UniTask PreallocateAsync(int count, CancellationToken cancellationToken = default)
+        public async ValueTask PreallocateAsync(int count, CancellationToken cancellationToken = default)
         {
+            if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
             var original = await _reference.LoadAsync(cancellationToken);
-            var instances = await Object.InstantiateAsync(original, count, _root).WithCancellation(cancellationToken);
+            var instances = await Object.InstantiateAsync(
+                original, count, new InstantiateParameters { parent = _root, worldSpace = true }, cancellationToken);
             foreach (var instance in instances)
             {
                 instance.gameObject.SetActive(false);
@@ -97,7 +102,7 @@ namespace AndanteTribe.Unity.Extensions
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async UniTask<T> RentAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<T> RentAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (_pool.Count > 0)
@@ -110,7 +115,8 @@ namespace AndanteTribe.Unity.Extensions
             }
 
             var original = await _reference.LoadAsync(cancellationToken);
-            var results = await Object.InstantiateAsync(original, _root).WithCancellation(cancellationToken);
+            var results = await Object.InstantiateAsync(
+                original, 1, new InstantiateParameters { parent = _root, worldSpace = true }, cancellationToken);
             return results[0];
         }
 
@@ -119,7 +125,7 @@ namespace AndanteTribe.Unity.Extensions
         /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The rented instance and <see cref="System.IDisposable"/> for release.</returns>
-        public async UniTask<RentScope> RentScopeAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<RentScope> RentScopeAsync(CancellationToken cancellationToken = default)
         {
             var instance = await RentAsync(cancellationToken);
             return new RentScope(this, instance);
