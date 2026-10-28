@@ -79,22 +79,28 @@ namespace AndanteTribe.Unity.Extensions
         /// </summary>
         /// <param name="count"></param>
         /// <param name="cancellationToken"></param>
-        public async ValueTask PreallocateAsync(int count, CancellationToken cancellationToken = default)
+        public ValueTask PreallocateAsync(int count, CancellationToken cancellationToken = default)
         {
             if (count <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(count));
             }
+            cancellationToken.ThrowIfCancellationRequested();
 
-            var original = await _reference.LoadAsync(cancellationToken);
-            var instances = await Object.InstantiateAsync(
-                original, count, new InstantiateParameters { parent = _root, worldSpace = true }, cancellationToken);
-            foreach (var instance in instances)
+            return PreallocateCoreAsync(this, count, cancellationToken);
+
+            static async ValueTask PreallocateCoreAsync(GameObjectPool<T> pool, int count, CancellationToken cancellationToken)
             {
-                instance.gameObject.SetActive(false);
-                _pool.Add(instance);
+                var original = await pool._reference.LoadAsync(cancellationToken);
+                var instances = await Object.InstantiateAsync(
+                    original, count, new InstantiateParameters { parent = pool._root, worldSpace = true }, cancellationToken);
+                foreach (var instance in instances)
+                {
+                    instance.gameObject.SetActive(false);
+                    pool._pool.Add(instance);
+                }
+                pool._pool.TrimExcess();
             }
-            _pool.TrimExcess();
         }
 
         /// <summary>
@@ -102,7 +108,7 @@ namespace AndanteTribe.Unity.Extensions
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async ValueTask<T> RentAsync(CancellationToken cancellationToken = default)
+        public ValueTask<T> RentAsync(CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (_pool.Count > 0)
@@ -111,13 +117,18 @@ namespace AndanteTribe.Unity.Extensions
                 var instance = _pool[last];
                 _pool.RemoveAt(last);
                 instance.gameObject.SetActive(true);
-                return instance;
+                return new ValueTask<T>(instance);
             }
 
-            var original = await _reference.LoadAsync(cancellationToken);
-            var results = await Object.InstantiateAsync(
-                original, 1, new InstantiateParameters { parent = _root, worldSpace = true }, cancellationToken);
-            return results[0];
+            return RentCoreAsync(this, cancellationToken);
+
+            static async ValueTask<T> RentCoreAsync(GameObjectPool<T> pool, CancellationToken cancellationToken)
+            {
+                var original = await pool._reference.LoadAsync(cancellationToken);
+                var results = await Object.InstantiateAsync(
+                    original, 1, new InstantiateParameters { parent = pool._root, worldSpace = true }, cancellationToken);
+                return results[0];
+            }
         }
 
         /// <summary>
@@ -125,10 +136,21 @@ namespace AndanteTribe.Unity.Extensions
         /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The rented instance and <see cref="System.IDisposable"/> for release.</returns>
-        public async ValueTask<RentScope> RentScopeAsync(CancellationToken cancellationToken = default)
+        public ValueTask<RentScope> RentScopeAsync(CancellationToken cancellationToken = default)
         {
-            var instance = await RentAsync(cancellationToken);
-            return new RentScope(this, instance);
+            var pending = RentAsync(cancellationToken);
+            if (pending.IsCompletedSuccessfully)
+            {
+                return new ValueTask<RentScope>(new RentScope(this, pending.Result));
+            }
+
+            return RentScopeCoreAsync(this, pending);
+
+            static async ValueTask<RentScope> RentScopeCoreAsync(GameObjectPool<T> pool, ValueTask<T> pending)
+            {
+                var instance = await pending;
+                return new RentScope(pool, instance);
+            }
         }
 
         /// <summary>

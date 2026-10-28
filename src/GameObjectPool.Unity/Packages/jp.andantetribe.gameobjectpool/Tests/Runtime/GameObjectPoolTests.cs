@@ -126,7 +126,9 @@ namespace AndanteTribe.Unity.Extensions.Tests
         {
             PooledComponent rentedInstance;
 
-            using (var scope = await _pool!.RentScopeAsync())
+            var pending = _pool!.RentScopeAsync();
+            Assert.That(pending.IsCompletedSuccessfully, Is.True);
+            using (var scope = await pending)
             {
                 rentedInstance = scope.Instance;
                 Assert.That(rentedInstance.gameObject.activeSelf, Is.True);
