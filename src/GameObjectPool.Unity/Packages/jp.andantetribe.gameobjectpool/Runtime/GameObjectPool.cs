@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using ObjectReference;
@@ -65,7 +66,11 @@ namespace AndanteTribe.Unity.Extensions
         /// <summary>
         /// The number of instances currently in the pool.
         /// </summary>
-        public int Count => _pool.Count;
+        public int Count
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => _pool.Count;
+        }
 
         public GameObjectPool(Transform root, IObjectReference<T> reference, int capacity = 10)
         {
@@ -135,7 +140,7 @@ namespace AndanteTribe.Unity.Extensions
         /// Asynchronously rents an instance from the pool (method for use with using statement).
         /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>The rented instance and <see cref="System.IDisposable"/> for release.</returns>
+        /// <returns>The rented instance and <see cref="IDisposable"/> for release.</returns>
         public ValueTask<RentScope> RentScopeAsync(CancellationToken cancellationToken = default)
         {
             var pending = RentAsync(cancellationToken);
@@ -201,12 +206,14 @@ namespace AndanteTribe.Unity.Extensions
             /// </summary>
             public readonly T Instance;
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             internal RentScope(GameObjectPool<T> gameObjectPool, T instance)
             {
                 _gameObjectPool = gameObjectPool;
                 Instance = instance;
             }
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             void IDisposable.Dispose() => _gameObjectPool.Return(Instance);
         }
     }
