@@ -49,7 +49,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "jp.andantetribe.objectreference": "1.0.2"
+        "jp.andantetribe.objectreference": "1.0.3"
       }
     },
     "jp.andantetribe.objectreference": {
@@ -59,7 +59,7 @@
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0"
       },
-      "hash": "6252adbd0c8ba72ecb3b60d24fa840235d808dda"
+      "hash": "056f84c5996acdb02e3538c196aa841435d18867"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
