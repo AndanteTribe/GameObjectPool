@@ -13,7 +13,7 @@
 
 ## 要件
 - Unity 6000.0 以上
-- [ObjectReference](https://github.com/AndanteTribe/ObjectReference) 0.1.2 以上
+- [ObjectReference](https://github.com/AndanteTribe/ObjectReference) 1.0.3 以上
 
 ## インストール
 `Window > Package Manager` からPackage Managerウィンドウを開き、`[+] > Add package from git URL` を選択して以下のURLを入力します。

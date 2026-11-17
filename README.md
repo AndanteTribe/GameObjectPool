@@ -13,7 +13,7 @@ It allows you to efficiently reuse `MonoBehaviour` instances, reducing the overh
 
 ## Requirements
 - Unity 6000.0 or later
-- [ObjectReference](https://github.com/AndanteTribe/ObjectReference) 0.1.2 or later
+- [ObjectReference](https://github.com/AndanteTribe/ObjectReference) 1.0.3 or later
 
 ## Installation
 Open `Window > Package Manager`, select `[+] > Add package from git URL`, and enter the following URL:
